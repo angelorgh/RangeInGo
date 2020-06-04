@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"regexp"
 	"strconv"
 	"strings"
-	"regexp"
 )
 
 func main() {
@@ -25,8 +25,8 @@ type Range struct {
 func NewRange(s string) Range {
 	var r Range
 
-	s = strings.ReplaceAll(s," ", "")
-	re := regexp.MustCompile(`(\[|\()(-?\d+),(-?\d+)(\]|\))`) 
+	s = strings.ReplaceAll(s, " ", "")
+	re := regexp.MustCompile(`(\[|\()(-?\d+),(-?\d+)(\]|\))`)
 	slice := re.FindAllStringSubmatch(s, -1)
 	var err error
 
@@ -166,18 +166,18 @@ func (range1 Range) Overlaps(r Range) bool {
 		condition = r.Contains(r1Lower)
 	}
 	if r1Lower < r2Lower {
-		condition = r.Contains(r2Lower)
+		condition = range1.Contains(r2Lower)
 	}
 
 	return condition
 }
 
-// Tests : Dank
+// Tests : For testing purposes
 func Tests() {
 
 	// NewRange 1
-	//r := NewRange("[3,8)")
-	//fmt.Println(r.LowerEndPoint, r.UpperEndPoint)
+	r := NewRange("[3,8)")
+	fmt.Println(r.LowerEndPoint, r.UpperEndPoint)
 
 	// NewRange 2
 	//r := NewRange("(-10,7]")
@@ -188,7 +188,7 @@ func Tests() {
 	//fmt.Println(r.LowerEndPoint, r.UpperEndPoint)
 
 	// NewRange 4
-	//r := NewRange("[5,    -6)")
+	//r := NewRange("[5, -6)")
 	//fmt.Println(r.LowerEndPoint, r.UpperEndPoint)
 
 	// EndPoints 1
@@ -224,36 +224,36 @@ func Tests() {
 	//fmt.Println(r.GetAllPoints())
 
 	// Contains 1
-    //r := NewRange("(2,10)")
+	//r := NewRange("(2,10)")
 	//fmt.Println(r.Contains(3))
 
 	// Contains 2
-    //r := NewRange("(-42,32]")
+	//r := NewRange("(-42,32]")
 	//fmt.Println(r.Contains(-32))
 
 	// Contains 3
-    //r := NewRange("[3,18]")
+	//r := NewRange("[3,18]")
 	//fmt.Println(r.Contains(21))
 
 	// Contains 4
-    //r := NewRange("[-12,-2)")
+	//r := NewRange("[-12,-2)")
 	//fmt.Println(r.Contains(-2))
 
 	// DoesNotContains 1
-	//r := NewRange("(-12,-3]")
-	//fmt.Println(r.DoesNotContains(-31))
+	//r := NewRange("(2,10)")
+	//fmt.Println(r.DoesNotContains(3))
 
 	// DoesNotContains 2
-	//r := NewRange("[4,12]")
-	//fmt.Println(r.DoesNotContains(15))
+	//r := NewRange("(-42,32]")
+	//fmt.Println(r.DoesNotContains(-32))
 
 	// DoesNotContains 3
-	//r := NewRange("(-22,-1]")
-	//fmt.Println(r.DoesNotContains(-3))
+	//r := NewRange("[3,18]")
+	//fmt.Println(r.DoesNotContains(21))
 
 	// DoesNotContains 4
-	//r := NewRange("[10,500)")
-	//fmt.Println(r.DoesNotContains(250))
+	//r := NewRange("[-12,-2)")
+	//fmt.Println(r.DoesNotContains(-2))
 
 	// ContainsArray 1
 	//r := NewRange("[2,53]")
@@ -265,13 +265,105 @@ func Tests() {
 
 	// ContainsArray 3
 	//r := NewRange("(-123,-52)")
-	//fmt.Println(r.ContainsArray([]int{-110, -23, -100, -124, -35}))
+	//fmt.Println(r.ContainsArray([]int{-110,-23,-100,-124,-35}))
 
 	// ContainsArray 4
 	//r := NewRange("(10, 51]")
 	//fmt.Println(r.ContainsArray([]int{19,23,17,7,52}))
 
-	//DoesNotContainsArray 4
-	r := NewRange("(10, 51]")
-	fmt.Println(r.DoesNotContainsArray([]int{19,23,17,7,52}))
+	// DoesNotContainsArray 1
+	//r := NewRange("[2,53]")
+	//fmt.Println(r.DoesNotContainsArray([]int{3,5,8,50}))
+
+	// DoesNotContainsArray 2
+	//r := NewRange("(-33,22]")
+	//fmt.Println(r.DoesNotContainsArray([]int{-31,-10,0,10,11,7,-12}))
+
+	// DoesNotContainsArray 3
+	//r := NewRange("(-123,-52)")
+	//fmt.Println(r.DoesNotContainsArray([]int{-110, -23, -100, -124, -35}))
+
+	// DoesNotContainsArray 4
+	//r := NewRange("(10, 51]")
+	//fmt.Println(r.DoesNotContainsArray([]int{19,23,17,7,52}))
+
+	// ContainsRange 1
+	//r := NewRange("(2,10]")
+	//fmt.Println(r.ContainsRange(NewRange("(4,6)")))
+
+	// ContainsRange 2
+	//r := NewRange("[-10, 3)")
+	//fmt.Println(r.ContainsRange(NewRange("[-10,2]")))
+
+	// ContainsRange 3
+	//r := NewRange("(50, 160)")
+	//fmt.Println(r.ContainsRange(NewRange("[150, 200]")))
+
+	// ContainsRange 4
+	//r := NewRange("[-45, 32)")
+	//fmt.Println(r.ContainsRange(NewRange("(-55, 0]")))
+
+	// DoesNotContainsRange 1
+	//r := NewRange("(2,10]")
+	//fmt.Println(r.DoesNotContainsRange(NewRange("(4,6)")))
+
+	// DoesNotContainsRange 2
+	//r := NewRange("[-10, 3)")
+	//fmt.Println(r.DoesNotContainsRange(NewRange("[-10,2]")))
+
+	// DoesNotContainsRange 3
+	//r := NewRange("(50, 160)")
+	//fmt.Println(r.DoesNotContainsRange(NewRange("[150, 200]")))
+
+	// DoesNotContainsRange 4
+	//r := NewRange("[-45, 32)")
+	//fmt.Println(r.DoesNotContainsRange(NewRange("(-55, 0]")))
+
+	// Equals 1
+	//r := NewRange("(2,9)")
+	//fmt.Println(r.Equals(NewRange("[3,8]")))
+
+	// Equals 2 
+	//r := NewRange("[-13,2)")
+	//fmt.Println(r.Equals(NewRange("[-13,1]")))
+
+	// Equals 3 
+	//r := NewRange("(2,9]")
+	//fmt.Println(r.Equals(NewRange("[1,11)")))
+
+	// Equals 4
+	//r := NewRange("[-10,7]")
+	//fmt.Println(r.Equals(NewRange("(-10,7)")))
+
+	// NotEquals 1
+	//r := NewRange("(2,9)")
+	//fmt.Println(r.NotEquals(NewRange("[3,8]")))
+
+	// NotEquals 2 
+	//r := NewRange("[-13,2)")
+	//fmt.Println(r.NotEquals(NewRange("[-13,1]")))
+
+	// NotEquals 3 
+	//r := NewRange("(2,9]")
+	//fmt.Println(r.NotEquals(NewRange("[1,11)")))
+
+	// NotEquals 4
+	//r := NewRange("[-10,7]")
+	//fmt.Println(r.NotEquals(NewRange("(-10,7)")))
+
+	// Overlaps 1
+	//r := NewRange("(-15, 23]")
+	//fmt.Println(r.Overlaps(NewRange("(10, 55]")))
+
+	// Overlaps 2
+	//r := NewRange("[20,66]")
+	//fmt.Println(r.Overlaps(NewRange("(65,100]")))
+
+	// Overlaps 3
+	//r := NewRange("(-11,22)")
+	//fmt.Println(r.Overlaps(NewRange("(22,33]")))
+
+	// Overlaps 4
+	//r := NewRange("[2,9)")
+	//fmt.Println(r.Overlaps(NewRange("(9,13)")))
 }
