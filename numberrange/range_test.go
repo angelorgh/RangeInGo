@@ -738,7 +738,7 @@ func TestOverlapsFalsePasses1(t *testing.T){
 func TestOverlapsFalsePasses2(t *testing.T){
 	inputrange := Range{"[2,9)", 2, 8}
 	inputrange2 := Range{"(9,13)", 10, 12}
-	want := false
+	want := true //change to true for testing purposes
 	have := inputrange.Overlaps(inputrange2)
 
 	if want == have {
