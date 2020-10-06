@@ -1,6 +1,6 @@
 language: go
 os: 
- - focal
+ - linux
  - osx
  - windows
 go: 
