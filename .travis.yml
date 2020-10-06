@@ -1,0 +1,10 @@
+language: go
+os: 
+ - linux
+ - osx
+ - windows
+go: 
+ - 1.15.2
+
+script:
+ - go test -v ./...
